@@ -1,8 +1,7 @@
 package ru.netology.servlet;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.netology.controller.PostController;
-import ru.netology.repository.PostRepository;
-import ru.netology.service.PostService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,15 +10,15 @@ import java.io.IOException;
 
 public class MainServlet extends HttpServlet {
 
+    AnnotationConfigApplicationContext context;
     private PostController controller;
     volatile HttpServletResponse resp;
     volatile HttpServletRequest req;
 
     @Override
     public void init() {
-        final var repository = new PostRepository();
-        final var service = new PostService(repository);
-        controller = new PostController(service);
+        context = new AnnotationConfigApplicationContext("ru.netology");
+        controller = (PostController)  context.getBean("postController");
     }
 
     protected void handleGet(String path, HttpServletResponse resp) throws IOException {
@@ -36,7 +35,7 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
-//    executorService.execute(() -> handle(req, resp));
+
         // если деплоились в root context, то достаточно этого
         this.resp = resp;
         this.req = req;
