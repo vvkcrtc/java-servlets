@@ -18,6 +18,7 @@ public class MainServlet extends HttpServlet {
     volatile HttpServletResponse resp;
     volatile HttpServletRequest req;
 
+
     @Override
     public void init() {
         context = new AnnotationConfigApplicationContext(JavaConfig.class);
