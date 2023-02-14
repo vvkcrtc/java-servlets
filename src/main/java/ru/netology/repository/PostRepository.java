@@ -3,7 +3,6 @@ package ru.netology.repository;
 import ru.netology.model.Post;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 // Stub
 public class PostRepository {
     private ConcurrentHashMap<Long, Post> posts = new ConcurrentHashMap<Long, Post>();
+    private static long lastPosts;
 
     public List<Post> all() {
         List<Post> result = new ArrayList<>();
@@ -19,14 +19,12 @@ public class PostRepository {
     }
 
     public Optional<Post> getById(long id) {
-
         return Optional.ofNullable(posts.get(id));
-
     }
 
     public void addPost(Post post) {
-        post.setId(posts.size() + 1);
-        posts.put(post.getId(), post);
+        post.setId(++lastPosts);
+        posts.putIfAbsent(post.getId(), post);
     }
 
     public Post save(Post post) {
